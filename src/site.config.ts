@@ -10,31 +10,31 @@ export const site = {
   name: 'Ranjeet Kumar',
   shortName: 'Ranjeet',
   // Used in <title> on the home page and in search results. Keep it under ~60 characters.
-  title: 'Ranjeet Kumar, software engineer',
+  title: 'Ranjeet Kumar, Full Stack Engineer',
   // Used as the meta description for the home page. Keep it under ~155 characters.
   description:
-    'Ranjeet Kumar is a software engineer who builds backend systems and writes about what he learns doing it.',
-  jobTitle: 'Software Engineer',
+    'Ranjeet Kumar is a full-stack engineer who builds reliable systems, APIs, and AI harnesses while learning by shipping real products.',
+  jobTitle: 'Full Stack Engineer',
   locale: 'en_IN',
   lang: 'en',
 
   // The large opening line on the home page.
-  intro: "I'm Ranjeet. I build software that other people depend on, and I write down what I learn along the way.",
+  intro: "I'm Ranjeet. I build full-stack products and AI harnesses that people rely on, and I write down what I learn while shipping them.",
 
   // A few sentences under the opening line. Plain text; blank line = new paragraph.
-  bio: `I work mostly on backend systems: APIs, data pipelines, and the unglamorous plumbing that keeps them fast and reliable. Before that I spent a few years on the frontend, which is why I still care how things feel to use.
+  bio: `I work across the stack: backend systems, cloud infrastructure, data pipelines, APIs, and the unglamorous plumbing that keeps software fast, reliable, and maintainable. I also like building AI harnesses that make intelligent systems easier to design, test, and operate. Before that, I spent time on the frontend, which is why I still care deeply about how products feel to use.
 
-This site is where I keep notes worth keeping. Some are tutorials, some are postmortems of my own mistakes.`,
+This site is where I keep notes worth keeping. Some are practical tutorials, some are postmortems from my own mistakes, and some are experiments in building better systems.`,
 
   // What you're doing right now. Update it every few months.
-  now: 'Learning how databases really work by building a small key–value store in Rust, and writing about each part as I finish it.',
+  now: 'Learning how databases really work by building a small key–value store in Rust, and exploring how to design better AI harnesses around real production workflows.',
   nowUpdated: '2026-09-01',
 
   // Where people can find you. Remove any line you don't use.
   links: [
     { label: 'GitHub', href: 'https://github.com/ranjeet692' },
-    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ranjeet692' },
-    { label: 'Email', href: 'mailto:you@example.com' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ranjeet-kumar-456a7a61' },
+    { label: 'Email', href: 'mailto:ranjeet692@gmail.com' },
   ],
 
   // Projects. `featured: true` shows it on the home page; all show on /projects/.
@@ -42,14 +42,14 @@ This site is where I keep notes worth keeping. Some are tutorials, some are post
     {
       name: 'Harness Hub',
       year: '2026',
-      description: 'A small webapp to showcase how AI harnesss works with some examples and a dedicated page to read about important concepts.',
+      description: 'A full-stack learning project that explores how AI harnesses work in practice, with examples and a dedicated space for the core concepts behind them.',
       href: 'https://github.com/ranjeet692/harness-hub',
       featured: true,
     },
     {
       name: 'Claude Skills',
       year: '2026',
-      description: 'An npm package which list skills that helps entire software development lifecycle and can be used to build a skill based app for claude.',
+      description: 'An npm package for surfacing practical skills across the software lifecycle, helping teams build more structured and repeatable AI-assisted workflows.',
       href: 'https://github.com/ranjeet692/claude-skills-pkg',
       featured: true,
     },
