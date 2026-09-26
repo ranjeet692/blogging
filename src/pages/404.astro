@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import PostList from '../components/PostList.astro';
+import { getPosts } from '../lib/posts';
+const recent = (await getPosts()).slice(0, 3);
+---
+
+<Base title="Page not found" description="This page doesn't exist." noindex>
+  <header class="grid page-head">
+    <div class="text">
+      <h1>There's no page at this address.</h1>
+      <p>It may have moved or never existed. Try the <a class="inline-link" href="/writing/">writing archive</a> or the <a class="inline-link" href="/">home page</a>.</p>
+    </div>
+  </header>
+  {recent.length > 0 && <PostList posts={recent} />}
+</Base>

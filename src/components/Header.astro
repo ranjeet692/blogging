@@ -1,0 +1,25 @@
+---
+import { site } from '../site.config';
+const { current } = Astro.props as { current: string };
+const nav = [
+  { href: '/writing/', label: 'Writing' },
+  { href: '/projects/', label: 'Projects' },
+];
+---
+
+<header class="site-header">
+  <a class="wordmark" href="/" aria-current={current === '/' ? 'page' : undefined}>{site.name}</a>
+  <nav aria-label="Main">
+    <ul>
+      {
+        nav.map((item) => (
+          <li>
+            <a href={item.href} aria-current={current.startsWith(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>

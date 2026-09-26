@@ -1,0 +1,32 @@
+---
+// The writing archive: posts grouped by year, with the year set large
+// in the margin and pinned while you scroll through that year.
+import { byYear, fmtDayMonth, isoDate, postUrl, type Post } from '../lib/posts';
+
+interface Props {
+  posts: Post[];
+  headingLevel?: 'h2' | 'h3';
+}
+const { posts, headingLevel = 'h2' } = Astro.props;
+const Heading = headingLevel;
+---
+
+<div class="archive">
+  {
+    byYear(posts).map(([year, items]) => (
+      <section class="year" aria-labelledby={`y${year}`}>
+        <Heading class="year-num" id={`y${year}`}>{year}</Heading>
+        <ol class="entries">
+          {items.map((p) => (
+            <li class="entry">
+              <a href={postUrl(p)}>
+                <span class="entry-title">{p.data.title}</span>
+                <time datetime={isoDate(p.data.date)}>{fmtDayMonth(p.data.date)}</time>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))
+  }
+</div>

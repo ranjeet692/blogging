@@ -1,0 +1,114 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { site } from '../../site.config';
+import { getPosts, postUrl, readingMinutes, fmtFull, isoDate, tagSlug } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, newer: posts[i - 1], older: posts[i + 1] },
+  }));
+}
+
+const { post, newer, older } = Astro.props;
+const { Content } = await render(post);
+const { title, description, date, updated, tags } = post.data;
+const minutes = readingMinutes(post.body);
+const url = new URL(postUrl(post), Astro.site).href;
+const image = `/og/${post.id}.png`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description,
+    url,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    image: new URL(image, Astro.site).href,
+    datePublished: date.toISOString(),
+    dateModified: (updated ?? date).toISOString(),
+    keywords: tags.join(', ') || undefined,
+    inLanguage: site.lang,
+    author: { '@type': 'Person', name: site.name, url: new URL('/', Astro.site).href },
+    publisher: { '@type': 'Person', name: site.name },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: site.name, item: new URL('/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: 'Writing', item: new URL('/writing/', Astro.site).href },
+      { '@type': 'ListItem', position: 3, name: title, item: url },
+    ],
+  },
+];
+---
+
+<Base
+  title={title}
+  description={description}
+  image={image}
+  type="article"
+  published={date}
+  modified={updated}
+  tags={tags}
+  jsonLd={jsonLd}
+>
+  <article>
+    <header class="grid post-head">
+      <div class="text">
+        <h1>{title}</h1>
+        <p class="lede">{description}</p>
+      </div>
+      <div class="margin post-meta">
+        <time datetime={isoDate(date)}>{fmtFull(date)}</time>
+        {updated && <span>Updated <time datetime={isoDate(updated)}>{fmtFull(updated)}</time></span>}
+        <span>{minutes} min read</span>
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="text prose">
+        <Content />
+      </div>
+
+      <footer class="text post-foot">
+        {
+          tags.length > 0 && (
+            <div>
+              <h2>Topics</h2>
+              <ul class="tags">
+                {tags.map((t) => (
+                  <li>
+                    <a href={`/writing/topics/${tagSlug(t)}/`}>{t}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+        {
+          (older || newer) && (
+            <nav class="pager" aria-label="More writing">
+              {older && (
+                <a href={postUrl(older)} rel="prev">
+                  <small>Older</small>
+                  <span>{older.data.title}</span>
+                </a>
+              )}
+              {newer && (
+                <a class="next" href={postUrl(newer)} rel="next">
+                  <small>Newer</small>
+                  <span>{newer.data.title}</span>
+                </a>
+              )}
+            </nav>
+          )
+        }
+      </footer>
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../site.config';
+
+const description = `Things ${site.name} has built: tools, experiments and open-source projects.`;
+---
+
+<Base title="Projects" description={description}>
+  <header class="grid page-head">
+    <div class="text">
+      <h1>Projects</h1>
+      <p>Things I've built, mostly to learn how something works.</p>
+    </div>
+  </header>
+
+  <div class="grid">
+    <ul class="text projects">
+      {
+        site.projects.map((p) => (
+          <li>
+            <div class="project-head">
+              <a href={p.href}>{p.name}</a>
+              <span>{p.year}</span>
+            </div>
+            <p>{p.description}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Base>

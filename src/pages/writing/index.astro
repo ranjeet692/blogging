@@ -1,0 +1,51 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { site } from '../../site.config';
+import { getPosts, allTags, postUrl, isoDate } from '../../lib/posts';
+
+const posts = await getPosts();
+const tags = allTags(posts);
+const description = `Notes, tutorials and postmortems by ${site.name} on building software.`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: `${site.name}: writing`,
+    url: new URL('/writing/', Astro.site).href,
+    description,
+    author: { '@type': 'Person', name: site.name, url: new URL('/', Astro.site).href },
+    blogPost: posts.slice(0, 20).map((p) => ({
+      '@type': 'BlogPosting',
+      headline: p.data.title,
+      url: new URL(postUrl(p), Astro.site).href,
+      datePublished: isoDate(p.data.date),
+    })),
+  },
+];
+---
+
+<Base title="Writing" description={description} jsonLd={jsonLd}>
+  <header class="grid page-head">
+    <div class="text">
+      <h1>Writing</h1>
+      <p>{posts.length} {posts.length === 1 ? 'piece' : 'pieces'} on building software, newest first.</p>
+      {
+        tags.length > 0 && (
+          <ul class="tags" aria-label="Topics" style="margin-top: 1.5rem">
+            {tags.map((t) => (
+              <li>
+                <a href={`/writing/topics/${t.slug}/`}>
+                  {t.tag}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </header>
+
+  <PostList posts={posts} />
+</Base>

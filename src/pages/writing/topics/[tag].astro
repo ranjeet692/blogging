@@ -1,0 +1,26 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PostList from '../../../components/PostList.astro';
+import { site } from '../../../site.config';
+import { getPosts, allTags, tagSlug } from '../../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return allTags(posts).map((t) => ({
+    params: { tag: t.slug },
+    props: { tag: t.tag, posts: posts.filter((p) => p.data.tags.some((x) => tagSlug(x) === t.slug)) },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<Base title={`Writing about ${tag}`} description={`Everything ${site.name} has written about ${tag}: notes, tutorials and postmortems, newest first.`}>
+  <header class="grid page-head">
+    <div class="text">
+      <h1>Writing about {tag}</h1>
+      <p>{posts.length} {posts.length === 1 ? 'piece' : 'pieces'}. <a class="inline-link" href="/writing/">See all writing</a></p>
+    </div>
+  </header>
+  <PostList posts={posts} />
+</Base>

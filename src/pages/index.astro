@@ -1,0 +1,95 @@
+---
+import Base from '../layouts/Base.astro';
+import PostList from '../components/PostList.astro';
+import { site } from '../site.config';
+import { getPosts, fmtFull } from '../lib/posts';
+
+const posts = await getPosts();
+const recent = posts.slice(0, 5);
+const featured = site.projects.filter((p) => p.featured);
+const bio = site.bio.split(/\n\s*\n/);
+const sameAs = site.links.filter((l) => l.href.startsWith('http')).map((l) => l.href);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: site.name,
+    url: new URL('/', Astro.site).href,
+    description: site.description,
+    inLanguage: site.lang,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    mainEntity: {
+      '@type': 'Person',
+      name: site.name,
+      url: new URL('/', Astro.site).href,
+      jobTitle: site.jobTitle,
+      description: site.description,
+      sameAs,
+    },
+  },
+];
+---
+
+<Base jsonLd={jsonLd}>
+  <div class="grid hero">
+    <h1 class="full">{site.intro}</h1>
+    <div class="text bio">
+      {bio.map((p) => <p>{p}</p>)}
+    </div>
+  </div>
+
+  <section class="grid section now" aria-labelledby="now">
+    <h2 class="margin section-title" id="now">Now</h2>
+    <div class="text">
+      <p>{site.now}</p>
+      <time class="stamp" datetime={site.nowUpdated}>Updated {fmtFull(new Date(site.nowUpdated))}</time>
+    </div>
+  </section>
+
+  <section class="grid section" aria-labelledby="work">
+    <h2 class="margin section-title" id="work">Selected projects</h2>
+    <div class="text">
+      <ul class="projects">
+        {
+          featured.map((p) => (
+            <li>
+              <div class="project-head">
+                <a href={p.href}>{p.name}</a>
+                <span>{p.year}</span>
+              </div>
+              <p>{p.description}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="more" href="/projects/">All projects</a>
+    </div>
+  </section>
+
+  {
+    recent.length > 0 && (
+      <section class="section" aria-labelledby="writing">
+        <div class="grid">
+          <h2 class="margin section-title" id="writing">Recent writing</h2>
+        </div>
+        <div style="margin-top: 1.25rem">
+          <PostList posts={recent} headingLevel="h3" />
+        </div>
+        <div class="grid">
+          <a class="more text" href="/writing/">All writing</a>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="grid section" aria-labelledby="elsewhere">
+    <h2 class="margin section-title" id="elsewhere">Elsewhere</h2>
+    <ul class="text links">
+      {site.links.map((l) => <li><a href={l.href} rel={l.href.startsWith('http') ? 'me' : undefined}>{l.label}</a></li>)}
+    </ul>
+  </section>
+</Base>

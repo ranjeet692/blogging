@@ -1,0 +1,12 @@
+---
+import { site } from '../site.config';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <p>© {year} {site.name}</p>
+  <ul>
+    {site.links.map((l) => <li><a href={l.href} rel={l.href.startsWith('http') ? 'me' : undefined}>{l.label}</a></li>)}
+    <li><a href="/rss.xml">RSS</a></li>
+  </ul>
+</footer>
